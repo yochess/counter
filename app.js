@@ -20,7 +20,7 @@ app.set('views', path.join(__dirname, '.'))
 app.use(express.static(path.join(__dirname, 'public')));
 
 // API: put request to increment counter
-app.put('/api/counter', (req, res) => {
+app.put('/api/getCounter', (req, res) => {
   Counter.findOne({}, (err, counter) => {
     if (!counter) {
       Counter.create({counter: '0'}).then(result => {

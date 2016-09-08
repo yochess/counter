@@ -1,5 +1,5 @@
 (() => {
-  const app = angular.module('counterApp');
+  const app = angular.module('counterApp', []);
 
   app.controller('counterCtrl', ($scope, Counter) => {
 
@@ -8,12 +8,14 @@
       Counter.getCounter().then(data => { $scope.data = data });
     }
 
+
+    $scope.getCounter();
   });
 
   app.factory('Counter', ($http) => {
     return {
       getCounter: () => {
-        $http.get('/api/getCounter').then(res => res.data);
+        return $http.get('/api/getCounter').then(res => res.data);
       }
     }
 
