@@ -5,7 +5,9 @@
 
 
     $scope.getCounter = () => {
-      Counter.getCounter().then(data => { $scope.data = data });
+      Counter.getCounter(1).then(data => {
+        $scope.counter = data.counter
+      });
     }
 
 
@@ -14,8 +16,8 @@
 
   app.factory('Counter', ($http) => {
     return {
-      getCounter: () => {
-        return $http.get('/api/getCounter').then(res => res.data);
+      getCounter: (id) => {
+        return $http.put(`/api/getCounter/${id}`).then(res => res.data);
       }
     }
 
