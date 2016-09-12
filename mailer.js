@@ -1,9 +1,33 @@
+// import gmail, password, and Mailer model
+/*
+  Mailer model consists of an
+    - email field,
+    - a radio field (one, two, five, or zero) in minutes
+    - updated field (last updated)
+*/
 const config = require('./config.js');
 const Mailer = require('./models.js').Mailer;
+
+// setup for nodemailer and transporter
+// note: this setup is specifically used for gmail accounts
+const nodemailer = require('nodemailer');
+const transporter = nodemailer.createTransport(`smtps://${config.gmail}%40gmail.com:${config.password}@smtp.gmail.com`);
+
+// find the current time
+const currentTime = new Date();
+const oneMinute = 60 * 1000;
+
+// connect to mongoose
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/counter');
 
+// find only those where the radio is set to one, two, or five minutes
 Mailer.find({radio: /one|two|five/}, (err, results) => {
+
+  // perform a task in sync
+  /*
+    The task
+  */
   Promise.all(results.map(result => {
     return doTask(result);
   }))
@@ -24,9 +48,6 @@ Mailer.find({radio: /one|two|five/}, (err, results) => {
   // mongoose.connection.close();
 });
 
-const currentTime = new Date();
-const oneMinute = 60 * 1000;
-
 function doTask(result) {
   return new Promise((resolve, reject) => {
     const lastUpdated = result.updated;
@@ -41,11 +62,6 @@ function doTask(result) {
     }
   });
 }
-
-const nodemailer = require('nodemailer');
-const transporter = nodemailer.createTransport(`smtps://${config.gmail}%40gmail.com:${config.password}@smtp.gmail.com`);
-
-
 
 function sendMail(result, resolve, reject) {
   // setup e-mail data with unicode symbols
