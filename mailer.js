@@ -26,7 +26,11 @@ Mailer.find({radio: /one|two|five/}, (err, results) => {
 
   // perform a task in sync
   /*
-    The task
+    The task performs 3 tasks
+      - doTask (checks whether the email of the model needs to be emailed)
+      - if so, send an email
+      - once sent, update the updated field of the model
+    Once all three tasks are performed, the connection is closed
   */
   Promise.all(results.map(result => {
     return doTask(result);
@@ -44,10 +48,9 @@ Mailer.find({radio: /one|two|five/}, (err, results) => {
     console.log('There is an error that you need to fix: ', err);
     mongoose.connection.close();
   })
-
-  // mongoose.connection.close();
 });
 
+// checks whether the requirement is met
 function doTask(result) {
   return new Promise((resolve, reject) => {
     const lastUpdated = result.updated;
@@ -63,6 +66,7 @@ function doTask(result) {
   });
 }
 
+// if the requirement is met, sends an email
 function sendMail(result, resolve, reject) {
   // setup e-mail data with unicode symbols
   const mailOptions = {
@@ -82,6 +86,7 @@ function sendMail(result, resolve, reject) {
   });
 }
 
+// once an email is sent, update the model
 function updateModel(result, info, resolve, reject) {
   result.update({
     updated: currentTime
