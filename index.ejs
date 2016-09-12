@@ -8,7 +8,25 @@
 
 
   <div ng-controller="counterCtrl">
-    <div ng-bind="counter">...</div>
+
+    <div class="counter">
+      <div ng-bind="counter">...</div>
+    </div>
+
+    <div class="form">
+      <h4>Sign up to receive emails from us!</h4>
+      <form ng-submit="subscribe()">
+      <div class="radio">
+        <input type="radio" ng-model="input.radio" value="one">1 minute<br>
+        <input type="radio" ng-model="input.radio" value="two">2 minutes<br>
+        <input type="radio" ng-model="input.radio" value="five">5 minutes<br>
+        <input type="radio" ng-model="input.radio" value="zero">Cancel
+      </div>
+        <input type="email" ng-model="input.email">
+        <button>Subscribe</button>
+      </form>
+    </div>
+
   </div>
 
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
